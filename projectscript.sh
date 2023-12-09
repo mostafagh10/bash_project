@@ -14,9 +14,25 @@ if [ $flag1 -eq 0 ]
 then
 	mkdir DB
 	echo "the DB Directory created"
+else
+	select choice in createDB listDB dropBD connectDB exit
+	do
+	case $choice in
+        createDB)
 	find / -name createdb.sh 2>/dev/null | while read -r file; do cp "$file" .; done
 	cd ./DB
 	source ../createdb.sh
-else
-	echo "show ls"
+	;;
+	listDB)
+	cd ./DB
+	echo `ls -F|grep '/'`
+	;;
+	exit)
+	exit
+	;;
+	*)
+	echo "enter valid choice"	
+	;;
+	esac
+	done
 fi
