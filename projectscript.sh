@@ -14,6 +14,7 @@ if [ $flag1 -eq 0 ]
 then
 	mkdir DB
 	echo "the DB Directory created"
+	find / -name createdb.sh 2>/dev/null | while read -r file; do cp "$file" .; done
 	cd ./DB
 	source ../createdb.sh
 else
