@@ -24,12 +24,14 @@ else
 	source ../createdb.sh
 	;;
 	listDB)
-	cd ./DB
+	cd $PWD/DB/
 	echo `ls -F|grep '/'`
+	cd ../
 	;;
 	dropBD)
 		read -p "Enter the name of the database that you want to delete: " db
-		path=./DB/$db
+		path=$PWD/DB/$db
+		echo $path
 		if [ -d "$path" ]
 		then
 		rm -r "$path"
@@ -38,6 +40,46 @@ else
 		echo "Invalid name. Please enter the correct name."
 		fi
 	;; 
+	connectDB)
+	read -p "Enter the name of database that you want to connect: " db
+	path=$PWD/DB/$db
+	echo $path
+	if [ -d $path ]
+	then
+	echo "you are now in '$db'"
+	select menu2 in createTable listTables dropTable insertTable selectTable deleteTable updateTable exit
+	do
+	case $menu2 in
+	 createTable)
+	 echo "create table"
+	 ;;
+	 listTables)
+	 echo "list Tables"
+	 ;;
+	 dropTable)
+	 echo "drop Table"
+	 ;;
+	 insertTable)
+	 echo "insert Table"
+	 ;;
+	 selectTable)
+	 echo "select Table"
+	 ;;
+	 deleteTable)
+	 echo "delete Table"
+	 ;;
+	 updateTable)
+	 echo "update Table"
+	 ;;
+	 exit)
+	 exit
+	 ;;
+	 esac
+	 done
+	else
+	echo "this database not exist ... try again with valid name"
+	fi
+	;;
 	exit)
 	exit
 	;;
