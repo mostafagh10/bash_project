@@ -14,6 +14,8 @@ if [ $flag1 -eq 0 ]
 then
 	mkdir DB
 	echo "the DB Directory created"
+	cd ./DB
+	source ../createdb.sh
 else
-	echo "show list"
+	echo "show ls"
 fi
