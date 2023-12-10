@@ -2,7 +2,7 @@
 
 cd $path
 shopt -s extglob
-
+#flag variable to check the full entered information | bool to check if the new table name is exists or not | pkselected to check if the pk is token or not
 typeset -i flag=0
 typeset -i bool=0
 typeset -i pkselected=0

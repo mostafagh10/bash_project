@@ -57,12 +57,39 @@ else
 	 source $PWD/createtable.sh
 	 echo "create table"
 	 ;;
+	 #-------------------------------------------------------------------------------------------------
 	 listTables)
-	 echo "list Tables"
+	 #list the tables files only without metadata files
+	 for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} != *".metadata" ]]
+	 then
+	 echo $var
+	 fi
+	 done
 	 ;;
+	 #---------------------------------------------------------------------------------------------------
 	 dropTable)
-	 echo "drop Table"
+	 read -p "enter the table name to drop it : " dbname
+	 #findtable variable to search for the table if it exists or not ( 0=> not exist) (1=> exists)
+	 findtable=0
+	 for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} = ${dbname} ]]
+	 then
+	 ((findtable=1))
+	 rm $dbname
+	 rm $dbname.metadata
+	 echo "the table $dbname is deleted"
+	 fi
+	 done
+	 #the table name doesn't exist because the findtable still equal 0
+	 if [ $findtable -eq 0 ]
+	 then
+	 echo "this name doesn't exist ..."
+	 fi
 	 ;;
+	 #-------------------------------------------------------------------------------------------------
 	 insertTable)
 	 echo "insert Table"
 	 ;;
