@@ -19,7 +19,7 @@ else
 	do
 	case $choice in
         createDB)
-	find / -name createdb.sh 2>/dev/null | while read -r file; do cp "$file" .; done
+	find ~/bash_project -name createdb.sh 2>/dev/null | while read -r file; do cp "$file" .; done
 	cd ./DB 2>/dev/null
 	source ../createdb.sh
 	;;
@@ -47,10 +47,14 @@ else
 	if [ -d $path ]
 	then
 	echo "you are now in '$db'"
+	cd $path
 	select menu2 in createTable listTables dropTable insertTable selectTable deleteTable updateTable exit
 	do
 	case $menu2 in
 	 createTable)
+	 cd ../../
+	 find ~/bash_project -name createtable.sh 2>/dev/null | while read -r file; do cp "$file" $PWD/; done
+	 source $PWD/createtable.sh
 	 echo "create table"
 	 ;;
 	 listTables)

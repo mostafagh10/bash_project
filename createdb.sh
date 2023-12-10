@@ -33,3 +33,4 @@ while [ $flag -eq 0 ]
 do
 is_valid_db_name
 done
+cd ../
