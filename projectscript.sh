@@ -91,7 +91,9 @@ else
 	 ;;
 	 #-------------------------------------------------------------------------------------------------
 	 insertTable)
-	 echo "insert Table"
+	 cd ../../
+	 find ~/bash_project -name insert.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
+	 source $PWD/insert.sh
 	 ;;
 	 selectTable)
 	 echo "select Table"
