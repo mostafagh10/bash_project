@@ -11,6 +11,7 @@ is_valid_table_name() {
 while [ $bool -eq 0 ]
 do
 read -p "Please enter the name of the table: " tablename
+tablename=$(echo "$tablename" | sed 's/ /_/g')
 if [ ! -f $tablename ]
 then
 case $tablename in

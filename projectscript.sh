@@ -96,7 +96,9 @@ else
 	 source $PWD/insert.sh
 	 ;;
 	 selectTable)
-	 echo "select Table"
+	 cd ../../
+	 find ~/bash_project -name select.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
+	 source $PWD/select.sh
 	 ;;
 	 deleteTable)
 	 echo "delete Table"

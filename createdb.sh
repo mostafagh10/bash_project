@@ -8,6 +8,7 @@ is_valid_db_name() {
 while [ $bool -eq 0 ]
 do
 read -p "Please enter the name of the database: " dbname
+dbname=$(echo "$dbname" | sed 's/ /_/g')
 if [ ! -d $dbname ]
 then
 case $dbname in
