@@ -102,7 +102,9 @@ else
 	 echo "delete Table"
 	 ;;
 	 updateTable)
-	 echo "update Table"
+	 cd ../../
+	 find ~/bash_project -name update.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
+	 source $PWD/update.sh
 	 ;;
 	 exit)
 	 exit

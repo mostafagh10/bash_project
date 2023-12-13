@@ -33,13 +33,14 @@ checknumber(){
 	;;
 	esac
 }	
-declare -a arr2
+
 #function to check if the provided stringPK is valid
 checkstringPK(){
 	read -p "Enter the content of this column: " content
 	case $content in
 	+([a-zA-Z0-9_@[:space:]]))
-	#awk -F: '{NR>1 && $index==$content {((flag2=1)) exit} }' $tablename	
+	#awk -F: '{NR>1 && $index==$content {((flag2=1)) exit} }' $tablename
+	##make flag2 variable to check if the input exists or not (1 => exists) (0 => not exist)	
 	flag2=$(awk -F: -v col_index="$index" -v content="$content" '
 	        BEGIN {
 		  flag2 = 0
@@ -51,10 +52,12 @@ checkstringPK(){
 	        END {
 		  print flag2
 	        }' "$tablename")
+	# the input not exist so it's unique
 	if [ $flag2 -eq 0 ]
 	then
 	arr1[$1]=$content
 	else
+	# the flag =1 so the input exist so it's not unique
 	echo "this string should be unique, please enter another one: "
 	checkstringPK $1 $content 
 	fi
@@ -70,6 +73,7 @@ checknumberPK(){
 	read -p "Enter the content of this column: " content
 	case $content in
 	+([0-9.]))
+	##make flag2 variable to check if the input exists or not (1 => exists) (0 => not exist)
 	flag2=$(awk -F: -v col_index="$index" -v content="$content" '
 	        BEGIN {
 		  flag2 = 0
@@ -81,10 +85,12 @@ checknumberPK(){
 	        END {
 		  print flag2
 	        }' "$tablename")
+	# the input not exist so it's unique
 	if [ $flag2 -eq 0 ]
 	then
 	arr1[$1]=$content
 	else
+	# the flag=1 so the input exists => not unique
 	echo "this number should be unique, please enter another one: "
 	checknumberPK $1 $content 
 	fi
