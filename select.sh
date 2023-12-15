@@ -13,6 +13,8 @@ for var in $(ls -F "$path"); do
             case $selectMenu in
                 selectAll)
                     cat "$tablename"  # printing the whole table
+                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectColumn)
                     read -p "Please enter the name of the column that you want to show: " columnName
@@ -25,6 +27,8 @@ for var in $(ls -F "$path"); do
                     if [ $searchcolname -gt 0 ]; then # the column number is gt 0 so we can proceed
                         cut -d: -f$searchcolname "$tablename" #printing the column
                     fi
+                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectRangeOfColumns)
                     read -p "Please enter the name of the start column: " startcol
@@ -45,6 +49,8 @@ for var in $(ls -F "$path"); do
                     if [ $start -gt 0 -a $end -gt 0 ]; then
                         cut -d: -f$start-$end "$tablename"
                     fi
+                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectMultipleColumns)
                     typeset -i columnflag=0
@@ -66,13 +72,19 @@ for var in $(ls -F "$path"); do
                         modifiedcols=$(IFS=,; echo "${fieldNumbers[*]}") #convert spaces to ,
                         cut -d: -f"$modifiedcols" "$tablename"
                     fi
+                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectRecords)
                     read -p "Please enter the value that you want to search about: " value
                     awk -v key="$value" -F: '{for (i=1; i<=NF; i++) {if ($i == key) {print $0}}}' "$tablename" # if the input value found it will print the whole record
+                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
-                exit)
-                    exit 
+                    exit)
+                    echo "back to second menu  (1)=>createtable   (2)=>listtables    (3)=>dropTable    (4)=>insertTable"
+                    echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
+                    break 
                     ;;
             esac
         done

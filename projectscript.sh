@@ -22,11 +22,13 @@ else
 	find ~/bash_project -name createdb.sh 2>/dev/null | while read -r file; do cp "$file" .; done
 	cd ./DB 2>/dev/null
 	source ../createdb.sh
+	echo "(1)=>createDB   (2)=>listDB   (3)=>dropBD    (4)=>connectDB   (5)=>exit"
 	;;
 	listDB)
 	cd $PWD/DB/
 	echo `ls -F|grep '/'`
 	cd ../
+	echo "(1)=>createDB   (2)=>listDB   (3)=>dropBD    (4)=>connectDB   (5)=>exit"
 	;;
 	dropBD)
 		read -p "Enter the name of the database that you want to delete: " db
@@ -39,6 +41,7 @@ else
 		else
 		echo "Invalid name. Please enter the correct name."
 		fi
+		echo "(1)=>createDB   (2)=>listDB   (3)=>dropBD    (4)=>connectDB   (5)=>exit"
 	;; 
 	connectDB)
 	read -p "Enter the name of database that you want to connect: " db
@@ -55,7 +58,8 @@ else
 	 cd ../../
 	 find ~/bash_project -name createtable.sh 2>/dev/null | while read -r file; do cp "$file" $PWD/; done
 	 source $PWD/createtable.sh
-	 echo "create table"
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 #-------------------------------------------------------------------------------------------------
 	 listTables)
@@ -67,6 +71,8 @@ else
 	 echo $var
 	 fi
 	 done
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 #---------------------------------------------------------------------------------------------------
 	 dropTable)
@@ -88,12 +94,16 @@ else
 	 then
 	 echo "this name doesn't exist ..."
 	 fi
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 #-------------------------------------------------------------------------------------------------
 	 insertTable)
 	 cd ../../
 	 find ~/bash_project -name insert.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
 	 source $PWD/insert.sh
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 selectTable)
 	 cd ../../
@@ -101,15 +111,23 @@ else
 	 source $PWD/select.sh
 	 ;;
 	 deleteTable)
-	 echo "delete Table"
+	 cd ../../
+	 find ~/bash_project -name delete.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
+	 source $PWD/delete.sh
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 updateTable)
 	 cd ../../
 	 find ~/bash_project -name update.sh 2>/dev/null | while read -r file; do cp 		"$file" $PWD/; done
 	 source $PWD/update.sh
+	 echo "(1)=>createtable   (2)=>listtables    (3)=>dropTable     (4)=>insertTable"
+         echo "(5)=>selectTable   (6)=>deleteTable   (7)=>updateTable   (8)=>exit "
 	 ;;
 	 exit)
-	 exit
+	 cd ../../
+	 echo "back to first menu  (1)=>createDB   (2)=>listDB     (3)=>dropDB      (4)=>connectDB     (5)=>exit"
+	 break
 	 ;;
 	 esac
 	 done

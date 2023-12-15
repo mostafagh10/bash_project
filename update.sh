@@ -10,7 +10,38 @@ checkstring(){
 	case $newvalue in
 	+([a-zA-Z0-9_@[:space:]]))
 	#make the update on the file
-	sed -i "s:$1:$newvalue:g" $tablename
+	numofcols=$(awk -F: 'NR == 1 {numofcols=NF} END {print numofcols}' "$tablename.metadata")
+		      #moving the updated data to another file
+		      awk -F: -v oldvalue="$1" -v numofcols="$numofcols" -v newvalue="$newvalue" -v searchcolname="$2" '{
+			  line = "";
+			  for (i = 1; i <= NF; i++) {
+			    if (i != searchcolname && i != numofcols) {
+			      line = line $i ":";
+			    }
+			    
+			    if (i == searchcolname && i != numofcols){
+			    if($i == oldvalue){
+			    line = line newvalue ":";
+			    }else{
+			    line = line $i ":";
+			    }
+			    }
+
+			    if (i == numofcols && i != searchcolname) {
+			     line = line $i;
+			    }
+			    
+			    if (i == numofcols && i == searchcolname) {
+			    if($i == oldvalue){
+			     line = line newvalue;
+			     }else{
+			     line = line $i;
+			     }
+			    }
+			  }
+			  printf "%s\n", line > "tablename.temp";
+			}' "$tablename"
+			mv tablename.temp $tablename
         echo "the string was updated"
 	;;
 	*)
@@ -26,7 +57,38 @@ checknumber(){
 	case $newvalue in
 	+([0-9.]))
 	#make the update on the file
-	sed -i "s:$1:$newvalue:g" $tablename
+	numofcols=$(awk -F: 'NR == 1 {numofcols=NF} END {print numofcols}' "$tablename.metadata")
+		      #moving the updated data to another file
+		      awk -F: -v oldvalue="$1" -v numofcols="$numofcols" -v newvalue="$newvalue" -v searchcolname="$2" '{
+			  line = "";
+			  for (i = 1; i <= NF; i++) {
+			    if (i != searchcolname && i != numofcols) {
+			      line = line $i ":";
+			    }
+			    
+			    if (i == searchcolname && i != numofcols){
+			    if($i == oldvalue){
+			    line = line newvalue ":";
+			    }else{
+			    line = line $i ":";
+			    }
+			    }
+
+			    if (i == numofcols && i != searchcolname) {
+			     line = line $i;
+			    }
+			    
+			    if (i == numofcols && i == searchcolname) {
+			    if($i == oldvalue){
+			     line = line newvalue;
+			     }else{
+			     line = line $i;
+			     }
+			    }
+			  }
+			  printf "%s\n", line > "tablename.temp";
+			}' "$tablename"
+			mv tablename.temp $tablename
         echo "the number was updated"
 	;;
 	*)
@@ -57,7 +119,38 @@ checkstringPK(){
 	if [ $flag2 -eq 0 ]
 	then
 	#make the update on the file
-	sed -i "s:$1:$newvalue:g" $tablename
+	numofcols=$(awk -F: 'NR == 1 {numofcols=NF} END {print numofcols}' "$tablename.metadata")
+	#moving the updated data to another file
+		      awk -F: -v oldvalue="$1" -v numofcols="$numofcols" -v newvalue="$newvalue" -v searchcolname="$2" '{
+			  line = "";
+			  for (i = 1; i <= NF; i++) {
+			    if (i != searchcolname && i != numofcols) {
+			      line = line $i ":";
+			    }
+			    
+			    if (i == searchcolname && i != numofcols){
+			    if($i == oldvalue){
+			    line = line newvalue ":";
+			    }else{
+			    line = line $i ":";
+			    }
+			    }
+
+			    if (i == numofcols && i != searchcolname) {
+			     line = line $i;
+			    }
+			    
+			    if (i == numofcols && i == searchcolname) {
+			    if($i == oldvalue){
+			     line = line newvalue;
+			     }else{
+			     line = line $i;
+			     }
+			    }
+			  }
+			  printf "%s\n", line > "tablename.temp";
+			}' "$tablename"
+			mv tablename.temp $tablename
         echo "the string was updated"
 	else
 	# the flag =1 so the input exist so it's not unique
@@ -93,7 +186,38 @@ checknumberPK(){
 	if [ $flag2 -eq 0 ]
 	then
 	#make the update on the file
-	sed -i "s:$1:$newvalue:g" $tablename
+	numofcols=$(awk -F: 'NR == 1 {numofcols=NF} END {print numofcols}' "$tablename.metadata")
+	#moving the updated data to another file
+		      awk -F: -v oldvalue="$1" -v numofcols="$numofcols" -v newvalue="$newvalue" -v searchcolname="$2" '{
+			  line = "";
+			  for (i = 1; i <= NF; i++) {
+			    if (i != searchcolname && i != numofcols) {
+			      line = line $i ":";
+			    }
+			    
+			    if (i == searchcolname && i != numofcols){
+			    if($i == oldvalue){
+			    line = line newvalue ":";
+			    }else{
+			    line = line $i ":";
+			    }
+			    }
+
+			    if (i == numofcols && i != searchcolname) {
+			     line = line $i;
+			    }
+			    
+			    if (i == numofcols && i == searchcolname) {
+			    if($i == oldvalue){
+			     line = line newvalue;
+			     }else{
+			     line = line $i;
+			     }
+			    }
+			  }
+			  printf "%s\n", line > "tablename.temp";
+			}' "$tablename"
+			mv tablename.temp $tablename
         echo "the number was updated"
 	else
 	# the flag =1 so the input exist so it's not unique
@@ -115,8 +239,9 @@ findtable=0
 	 if [[ ${var} == ${tablename} ]] #check if the table exist or not
 	 then
 	 ((findtable=1)) # table exist
+	 awk -F: '{if(NR==1) print $0}' $tablename
 	 read -p "enter the column you want to update : " colname
-         #searchcolname=$(awk -F: '{if (NR==1) for(i=1 ; i<=NF ; i++) if($colname==$i) print i }' $tablename)))
+	 #searchcolname variable to search for the position the columnname
          typeset -i searchcolname=0
          searchcolname=$(awk -F: -v colname="$colname" '{if (NR==1) for(i=1; i<=NF; i++) if(colname==$i) print i }' "$tablename")
          if [ $searchcolname -eq 0 ]
@@ -128,7 +253,13 @@ findtable=0
          read -p "enter the value you want you update it : " oldvalue
          #to search for the value you want to update through the col
          typeset -i searchvalue=0
-         searchvalue=$(awk -F: -v searchcolname=$searchcolname -v oldvalue="$oldvalue" '{if (NR>1) if(oldvalue==$searchcolname) print NR }' "$tablename")
+         #searchvalue=$(awk -F: -v searchcolname=$searchcolname -v oldvalue="$oldvalue" '{if (NR>1) if(oldvalue==$searchcolname) print NR exit; }' "$tablename")
+         searchvalue=$(awk -F: -v searchcolname="$searchcolname" -v oldvalue="$oldvalue" '{
+	  if (NR > 1 && oldvalue == $searchcolname) {
+	    print NR;
+	    exit;  # Exit after finding the first match
+	  }
+	}' "$tablename")
          if [ $searchvalue -eq 0 ]
          then
          echo "the value not fount"
@@ -139,10 +270,10 @@ findtable=0
          #make cases to check about the datatype of the newvalue
          case $checkvar in
 		        1)
-			  checkstring "$oldvalue"
+			  checkstring "$oldvalue" "$searchcolname"
 			  ;;
 		        2)
-			  checknumber "$oldvalue"
+			  checknumber "$oldvalue" "$searchcolname"
 			  ;;
 		        3)
 		           checkstringPK "$oldvalue" "$searchcolname"
