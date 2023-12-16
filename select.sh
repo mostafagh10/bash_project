@@ -2,8 +2,15 @@
 
 shopt -s extglob
 cd "$path"
-
+for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} != *".metadata" ]]
+	 then
+	 echo $var
+	 fi
+	 done
 read -p "Please enter the name of the table that you want to show its content: " tablename
+tablename=$(echo "$tablename" | sed 's/ /_/g')
 findtable=0
 
 for var in $(ls -F "$path"); do
@@ -17,6 +24,7 @@ for var in $(ls -F "$path"); do
                     echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectColumn)
+                	awk -F: '{if(NR==1){print $0}}' "$tablename"
                     read -p "Please enter the name of the column that you want to show: " columnName
                     typeset -i searchcolname=0
                     searchcolname=$(awk -F: -v colname="$columnName" '{if (NR==1) for(i=1; i<=NF; i++) if(colname==$i) print i }' "$tablename")  #getting the column field number
@@ -31,6 +39,7 @@ for var in $(ls -F "$path"); do
                     echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectRangeOfColumns)
+                	awk -F: '{if(NR==1){print $0}}' "$tablename"
                     read -p "Please enter the name of the start column: " startcol
                     read -p "Please enter the name of the end column: " endcol
                     typeset -i start=0
@@ -47,12 +56,13 @@ for var in $(ls -F "$path"); do
                     fi
 
                     if [ $start -gt 0 -a $end -gt 0 ]; then
-                        cut -d: -f$start-$end "$tablename"
+                        cut -d: -f$start-$end "$tablename" 2>/dev/null
                     fi
                     echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
                     echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                 selectMultipleColumns)
+                	awk -F: '{if(NR==1){print $0}}' "$tablename"
                     typeset -i columnflag=0
                     declare -a fieldNumbers #we use this array to store the column numbers
                     read -p "Please enter the name of the columns that you want to show: " cols
@@ -75,10 +85,27 @@ for var in $(ls -F "$path"); do
                     echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
                     echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
+                    
                 selectRecords)
-                    read -p "Please enter the value that you want to search about: " value
-                    awk -v key="$value" -F: '{for (i=1; i<=NF; i++) {if ($i == key) {print $0}}}' "$tablename" # if the input value found it will print the whole record
-                    echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
+                    awk -F: '{if(NR==1){print $0}}' "$tablename"                   
+                    read -p "Please enter the name of the column that you want to pick a key from: " columnName
+		searchcolname=$(awk -F: -v colname="$columnName" 'NR==1 {for(i=1; i<=NF; 			i++) if(colname==$i) print i }' "$tablename")
+
+		if [ $searchcolname -eq 0 ]; then
+		  echo "You've entered a wrong column name"
+		fi
+
+		if [ $searchcolname -gt 0 ]; then
+		  read -p "Enter the value: " rowvalue
+		  awk -v key="$rowvalue" -v scol="$searchcolname" -F: '
+		  {
+		    if ($scol == key) {
+		      print $0
+		    }
+		  }
+		  ' "$tablename"
+		fi
+        		echo "(1)=>selectAll                 (2)=>selectColumn      (3)=>selectRangeOfColumns"
                     echo "(4)=>selectMultipleColumns     (5)=>selectRecords     (6)=>exit"
                     ;;
                     exit)

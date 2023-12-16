@@ -15,7 +15,7 @@ then
 	mkdir DB
 	echo "the DB Directory created"
 else
-	select choice in createDB listDB dropBD connectDB exit
+	select choice in createDB listDB dropDB connectDB exit
 	do
 	case $choice in
         createDB)
@@ -30,8 +30,10 @@ else
 	cd ../
 	echo "(1)=>createDB   (2)=>listDB   (3)=>dropBD    (4)=>connectDB   (5)=>exit"
 	;;
-	dropBD)
+	dropDB)
+		ls DB
 		read -p "Enter the name of the database that you want to delete: " db
+		db=$(echo "$db" | sed 's/ /_/g')
 		path=$PWD/DB/$db
 		echo $path
 		if [ -d "$path" ]
@@ -41,10 +43,12 @@ else
 		else
 		echo "Invalid name. Please enter the correct name."
 		fi
-		echo "(1)=>createDB   (2)=>listDB   (3)=>dropBD    (4)=>connectDB   (5)=>exit"
+		echo "(1)=>createDB   (2)=>listDB   (3)=>dropDB    (4)=>connectDB   (5)=>exit"
 	;; 
 	connectDB)
+	ls DB
 	read -p "Enter the name of database that you want to connect: " db
+	db=$(echo "$db" | sed 's/ /_/g')
 	path=$PWD/DB/$db
 	echo $path
 	if [ -d $path ]
@@ -76,6 +80,13 @@ else
 	 ;;
 	 #---------------------------------------------------------------------------------------------------
 	 dropTable)
+	 for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} != *".metadata" ]]
+	 then
+	 echo $var
+	 fi
+	 done
 	 read -p "enter the table name to drop it : " dbname
 	 #findtable variable to search for the table if it exists or not ( 0=> not exist) (1=> exists)
 	 findtable=0

@@ -102,8 +102,16 @@ checknumberPK(){
 	esac	
 }
 
-
+for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} != *".metadata" ]]
+	 then
+	 echo $var
+	 fi
+	 done
 read -p "please enter the name of the table that you want to insert into: " tablename
+tablename=$(echo "$tablename" | sed 's/ /_/g')
+awk -F: '{if(NR==1) print $0}' "$tablename"
 findtable=0
 	 for var in `ls -F $path` # list all the files in the provided path
 	 do

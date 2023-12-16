@@ -3,8 +3,15 @@
 shopt -s extglob
 
 cd $path
-
-read -p "please enter the name of the table that you want to delete into: " tablename
+for var in `ls -F $PWD`
+	 do
+	 if [[ ${var} != *".metadata" ]]
+	 then
+	 echo $var
+	 fi
+	 done
+read -p "please enter the name of the table that you want to delete from: " tablename
+tablename=$(echo "$tablename" | sed 's/ /_/g')
 findtable=0
 	 for var in `ls -F $path` # list all the files in the provided path
 	 do
@@ -12,7 +19,7 @@ findtable=0
 	 then
 	 ((findtable=1)) # table exist
 	 #-----------------------------------------------------make select to choose the way to delete
-	 echo "(1)=>DeleteAllData (2)=>DeleteRow (3)=>DeleteColumn (4)=> DeleteRangeOfCOlumns)"
+	 echo "(1)=>DeleteAllData (2)=>DeleteRow (3)=>DeleteColumn"
 	 read -p "enter the number of choice for your way to delete : " numofchoice
 	 #----------------------------------------------------first choice
 	 if [ $numofchoice -eq 1 ]
@@ -23,6 +30,7 @@ findtable=0
 	 #-----------------------------------------------------second choice
 	 if [ $numofchoice -eq 2 ]
 	 then
+	 awk -F: '{if(NR==1) print $0}' "$tablename"
 	 read -p "enter the column name : " colname
 	 #-----------------------------------------------------check if the column name exist or not
 	 typeset -i flag1=0
@@ -58,6 +66,7 @@ findtable=0
 	 #------------------------------------------- choice number 3
 	 if [ $numofchoice -eq 3 ]
 	 then
+	 	 awk -F: '{if(NR==1) print $0}' "$tablename"
 		 read -p "Please enter the name of the column that you want to delete: " columnName
 		 #searchcolname variable to get the position of column (first,second,....etc)
 		            typeset -i searchcolname=0
@@ -135,12 +144,7 @@ findtable=0
 		            
 	 fi
 	 
-	 if [ $numofchoice -eq 4 ]
-	 then
-	 print "DeleteRangeOfCOlumns"
-	 fi
-	 
-	 if [ $numofchoice -gt 4 ]
+	 if [ $numofchoice -gt 3 ]
 	 then
 	 echo "invalid option"
 	 fi
